@@ -1,5 +1,5 @@
 {
-  "name": "@trynullsec/s1-mcp",
+  "name": "s1-mcp",
   "version": "0.1.0",
   "description": "Security tools for AI coding agents.",
   "type": "module",
