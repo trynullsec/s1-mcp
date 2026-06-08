@@ -6,6 +6,9 @@ import {
   ListToolsRequestSchema
 } from "@modelcontextprotocol/sdk/types.js";
 
+import { handleS1ExplainFinding, s1ExplainFindingTool } from "./tools/s1-explain-finding.js";
+import { handleS1Gate, s1GateTool } from "./tools/s1-gate.js";
+import { handleS1ScanFile, s1ScanFileTool } from "./tools/s1-scan-file.js";
 import { handleS1ScanRepo, s1ScanRepoTool } from "./tools/s1-scan-repo.js";
 import { handleS1ZkExplain, s1ZkExplainTool } from "./tools/s1-zk-explain.js";
 import { handleS1ZkRules, s1ZkRulesTool } from "./tools/s1-zk-rules.js";
@@ -24,7 +27,15 @@ const server = new Server(
 );
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
-  tools: [s1ZkScanTool, s1ZkExplainTool, s1ZkRulesTool, s1ScanRepoTool]
+  tools: [
+    s1ScanRepoTool,
+    s1ScanFileTool,
+    s1ExplainFindingTool,
+    s1GateTool,
+    s1ZkScanTool,
+    s1ZkExplainTool,
+    s1ZkRulesTool
+  ]
 }));
 
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
@@ -39,6 +50,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       return handleS1ZkRules(input);
     case s1ScanRepoTool.name:
       return handleS1ScanRepo(input);
+    case s1ScanFileTool.name:
+      return handleS1ScanFile(input);
+    case s1ExplainFindingTool.name:
+      return handleS1ExplainFinding(input);
+    case s1GateTool.name:
+      return handleS1Gate(input);
     default:
       throw new Error(`Unknown tool: ${name}`);
   }

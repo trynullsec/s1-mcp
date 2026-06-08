@@ -1,18 +1,18 @@
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 
-import { S1ScanRepoInputSchema } from "../types.js";
-import { scanRepo } from "../scanner/scan.js";
+import { scanFile } from "../scanner/scan.js";
+import { S1ScanFileInputSchema } from "../types.js";
 
-export const s1ScanRepoTool = {
-  name: "s1_scan_repo",
+export const s1ScanFileTool = {
+  name: "s1_scan_file",
   description:
-    "Scan a repository or app directory for deterministic Nullsec S1 security findings in TypeScript, JavaScript, JSON, env examples, and Base/EVM Solidity files.",
+    "Scan one supported application/security file with deterministic Nullsec S1 rules. Unsupported files return an explicit unsupported result.",
   inputSchema: {
     type: "object",
     properties: {
-      target: {
+      filePath: {
         type: "string",
-        description: "Path to the repository to scan."
+        description: "Path to the file to scan."
       },
       ruleCategories: {
         type: "array",
@@ -33,14 +33,14 @@ export const s1ScanRepoTool = {
         description: "Optional finding categories to include."
       }
     },
-    required: ["target"],
+    required: ["filePath"],
     additionalProperties: false
   }
 } as const;
 
-export async function handleS1ScanRepo(input: unknown): Promise<CallToolResult> {
-  const parsedInput = S1ScanRepoInputSchema.parse(input);
-  const result = await scanRepo(parsedInput);
+export async function handleS1ScanFile(input: unknown): Promise<CallToolResult> {
+  const parsedInput = S1ScanFileInputSchema.parse(input);
+  const result = await scanFile(parsedInput);
 
   return {
     content: [

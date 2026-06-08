@@ -35,4 +35,10 @@ describe("validateTargetPath", () => {
       "null bytes"
     );
   });
+
+  it("rejects sibling repository scans outside cwd", () => {
+    expect(() => validateTargetPath("/workspace/other-app", cwd)).toThrow(
+      "current working directory"
+    );
+  });
 });
